@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026年2月11日 美股市场行情报告</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Noto Sans SC', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%); }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeInUp 0.6s ease-out forwards; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+
+        /* Stock specific colors */
+        .stock-aapl { background: linear-gradient(135deg, #1c1c1e 0%, #434344 100%); }
+        .stock-msft { background: linear-gradient(135deg, #00a4ef 0%, #0078d4 100%); }
+        .stock-googl { background: linear-gradient(135deg, #4285f4 0%, #34a853 50%, #fbbc05 100%); }
+        .stock-amzn { background: linear-gradient(135deg, #ff9900 0%, #232f3e 100%); }
+        .stock-nvda { background: linear-gradient(135deg, #76b900 0%, #5a8a00 100%); }
+        .stock-meta { background: linear-gradient(135deg, #0081fb 0%, #0066c8 100%); }
+        .stock-tsla { background: linear-gradient(135deg, #e82127 0%, #cc0000 100%); }
+
+        /* Dark Mode Styles */
+        html.dark body { background-color: #0a0f1c; color: #e2e8f0; }
+        html.dark .glass-effect {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        html.dark h2, html.dark h3, html.dark h4 { color: #f8fafc; }
+        html.dark .text-gray-800 { color: #f1f5f9; }
+        html.dark .text-gray-700 { color: #cbd5e1; }
+        html.dark .text-gray-600 { color: #94a3b8; }
+        html.dark .text-gray-500 { color: #64748b; }
+        html.dark .bg-gray-50 { background-color: rgba(30, 41, 59, 0.6); }
+        html.dark .bg-gray-100 { background-color: rgba(30, 41, 59, 0.8); }
+        html.dark .bg-blue-50 { background-color: rgba(30, 58, 138, 0.3); }
+        html.dark .bg-green-50 { background-color: rgba(20, 83, 45, 0.3); }
+        html.dark .bg-red-50 { background-color: rgba(127, 29, 29, 0.3); }
+        html.dark .bg-yellow-50 { background-color: rgba(161, 98, 7, 0.3); }
+        html.dark .bg-purple-50 { background-color: rgba(88, 28, 135, 0.3); }
+        html.dark footer { background-color: #020617; }
+        html.dark .border-gray-200 { border-color: rgba(51, 65, 85, 0.5); }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+        }
+        html.dark .theme-toggle {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+
+        /* Glowing effects for dark mode */
+        html.dark .glow-blue {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+        html.dark .glow-green {
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+        }
+        html.dark .glow-red {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" title="切换主题">
+        <span id="themeIcon">☀️</span>
+    </button>
+
+    <!-- Header -->
+    <header class="gradient-bg text-white py-8 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold mb-2">美股市场行情报告</h1>
+                    <p class="text-white/80 text-lg">美东时间 2026年2月10日 收盘</p>
+                </div>
+                <div class="mt-4 md:mt-0 text-right">
+                    <p class="text-sm text-white/70">数据更新时间</p>
+                    <p class="text-xl font-semibold">2026-02-11 05:00 (北京时间)</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Market Overview -->
+        <section class="mb-10 animate-fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-blue-500 to-cyan-500 rounded mr-3"></span>
+                美股三大指数
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Dow Jones -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg glow-green">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">道琼斯工业指数</h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">DJI</span>
+                    </div>
+                    <p class="text-4xl font-bold text-red-500 mb-2">50,188.14</p>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-lg text-red-600 font-semibold">+52.27</span>
+                        <span class="text-lg text-red-600 font-semibold">+0.10%</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-3">连续第三日创历史新高</p>
+                    <p class="text-xs text-gray-400 mt-1">成交量: 5.33亿股</p>
+                </div>
+
+                <!-- S&P 500 -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg glow-green">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">标普500指数</h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-gray-200 text-gray-700">S&P 500</span>
+                    </div>
+                    <p class="text-4xl font-bold text-green-500 mb-2">6,941.81</p>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-lg text-green-600 font-semibold">-23.01</span>
+                        <span class="text-lg text-green-600 font-semibold">-0.33%</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-3">科技股拖累明显</p>
+                    <p class="text-xs text-gray-400 mt-1">成交量: 34.9亿股</p>
+                </div>
+
+                <!-- NASDAQ -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg glow-green">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">纳斯达克综合指数</h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-700">NASDAQ</span>
+                    </div>
+                    <p class="text-4xl font-bold text-green-500 mb-2">23,102.47</p>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-lg text-green-600 font-semibold">-136.20</span>
+                        <span class="text-lg text-green-600 font-semibold">-0.59%</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-3">科技股表现分化</p>
+                    <p class="text-xs text-gray-400 mt-1">纳指领跌三大指数</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Magnificent 7 -->
+        <section class="mb-10 animate-fade-in delay-1">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-purple-500 to-pink-500 rounded mr-3"></span>
+                美股七巨头 (Magnificent Seven)
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Apple -->
+                <div class="glass-effect rounded-xl p-5 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 rounded-xl stock-aapl flex items-center justify-center text-white text-2xl">
+                            🍎
+                        </div>
+                        <span class="px-2 py-1 rounded-lg text-xs font-bold bg-gray-200">AAPL</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-1">苹果</h3>
+                    <p class="text-2xl font-bold text-gray-700 mb-2">$274.28</p>
+                    <p class="text-sm text-green-600 font-medium">-0.34%</p>
+                    <p class="text-xs text-gray-400 mt-2">盘后: $274.51</p>
+                </div>
+
+                <!-- Microsoft -->
+                <div class="glass-effect rounded-xl p-5 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 rounded-xl stock-msft flex items-center justify-center text-white text-xl font-bold">
+                            M
+                        </div>
+                        <span class="px-2 py-1 rounded-lg text-xs font-bold bg-gray-200">MSFT</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-1">微软</h3>
+                    <p class="text-2xl font-bold text-gray-700 mb-2">—</p>
+                    <p class="text-sm text-green-600 font-medium">-0.08%</p>
+                    <p class="text-xs text-gray-400 mt-2">盘中曾反弹+1.59%</p>
+                </div>
+
+                <!-- Google -->
+                <div class="glass-effect rounded-xl p-5 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 rounded-xl stock-googl flex items-center justify-center text-white text-xl font-bold">
+                            G
+                        </div>
+                        <span class="px-2 py-1 rounded-lg text-xs font-bold bg-gray-200">GOOGL</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-1">谷歌</h3>
+                    <p class="text-2xl font-bold text-gray-700 mb-2">—</p>
+                    <p class="text-sm text-green-600 font-medium">-1.77%</p>
+                    <p class="text-xs text-gray-400 mt-2">2026年CAPEX达$1850亿</p>
+                </div>
+
+                <!-- Amazon -->
+                <div class="glass-effect rounded-xl p-5 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 rounded-xl stock-amzn flex items-center justify-center text-white text-xl">
+                            a
+                        </div>
+                        <span class="px-2 py-1 rounded-lg text-xs font-bold bg-gray-200">AMZN</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-1">亚马逊</h3>
+                    <p class="text-2xl font-bold text-gray-700 mb-2">—</p>
+                    <p class="text-sm text-green-600 font-medium">-0.84%</p>
+                    <p class="text-xs text-gray-400 mt-2">支出计划引发担忧</p>
+                </div>
+
+                <!-- NVIDIA -->
+                <div class="glass-effect rounded-xl p-5 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 rounded-xl stock-nvda flex items-center justify-center text-white text-xl font-bold">
+                            N
+                        </div>
+                        <span class="px-2 py-1 rounded-lg text-xs font-bold bg-gray-200">NVDA</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-1">英伟达</h3>
+                    <p class="text-2xl font-bold text-gray-700 mb-2">—</p>
+                    <p class="text-sm text-red-600 font-medium">+0.79%</p>
+                    <p class="text-xs text-gray-400 mt-2">黄仁勋讲话稳定信心</p>
+                </div>
+
+                <!-- Meta -->
+                <div class="glass-effect rounded-xl p-5 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 rounded-xl stock-meta flex items-center justify-center text-white text-xl font-bold">
+                            M
+                        </div>
+                        <span class="px-2 py-1 rounded-lg text-xs font-bold bg-gray-200">META</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-1">Meta</h3>
+                    <p class="text-2xl font-bold text-gray-700 mb-2">—</p>
+                    <p class="text-sm text-green-600 font-medium">-0.96%</p>
+                    <p class="text-xs text-gray-400 mt-2">财报后曾大涨10%</p>
+                </div>
+
+                <!-- Tesla -->
+                <div class="glass-effect rounded-xl p-5 card-hover shadow-lg lg:col-span-2">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 rounded-xl stock-tsla flex items-center justify-center text-white text-xl font-bold">
+                            T
+                        </div>
+                        <span class="px-2 py-1 rounded-lg text-xs font-bold bg-red-200 text-red-700">+1.89%</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800 mb-1">特斯拉</h3>
+                            <p class="text-2xl font-bold text-gray-700">$417.32</p>
+                            <p class="text-xs text-gray-400">前收盘价</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-lg font-bold text-red-600">+1.89%</p>
+                            <p class="text-sm text-gray-600">七巨头最佳</p>
+                            <p class="text-xs text-gray-400">成交: 6422万股</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2">波幅: $417.00 - $427.25 | Cybercab量产推进</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market Analysis -->
+        <section class="mb-10 animate-fade-in delay-2">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-yellow-500 to-orange-500 rounded mr-3"></span>
+                市场要闻与分析
+            </h2>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Macro Data -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <span class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-white mr-3">
+                            📊
+                        </span>
+                        <h3 class="text-xl font-bold text-gray-800">宏观经济数据</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <p class="font-semibold text-gray-700 mb-2">美国12月零售销售</p>
+                            <p class="text-2xl font-bold text-blue-600">0%</p>
+                            <p class="text-sm text-gray-600">环比持平，低于预期+0.4%</p>
+                            <p class="text-xs text-gray-400 mt-1">11月曾增长0.6%</p>
+                        </div>
+                        <p class="text-sm text-gray-600">消费动能降温引发市场对经济增长的担忧，强化降息预期</p>
+                    </div>
+                </div>
+
+                <!-- AI Investment -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <span class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white mr-3">
+                            🤖
+                        </span>
+                        <h3 class="text-xl font-bold text-gray-800">AI投资热潮</h3>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="p-4 bg-purple-50 rounded-lg">
+                            <p class="font-semibold text-gray-700 mb-2">谷歌2026年CAPEX</p>
+                            <p class="text-2xl font-bold text-purple-600">$1,850亿</p>
+                            <p class="text-sm text-gray-600">引发AI投资泡沫担忧</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="p-3 bg-gray-50 rounded-lg text-center">
+                                <p class="text-lg font-bold text-gray-700">$6,500亿</p>
+                                <p class="text-xs text-gray-500">四大云厂商合计</p>
+                            </div>
+                            <div class="p-3 bg-gray-50 rounded-lg text-center">
+                                <p class="text-lg font-bold text-gray-700">$7,400亿</p>
+                                <p class="text-xs text-gray-500">含甲骨文/CoreWeave</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Stocks -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <span class="w-10 h-10 rounded-full bg-gradient-to-r from-red-500 to-orange-500 flex items-center justify-center text-white mr-3">
+                            🏦
+                        </span>
+                        <h3 class="text-xl font-bold text-gray-800">金融股大跌</h3>
+                    </div>
+                    <div class="space-y-3">
+                        <p class="text-sm text-gray-600">Altruist推出AI税务规划工具，引发市场对金融服务业被AI重塑的焦虑</p>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                                <span class="text-gray-700">LPL Financial</span>
+                                <span class="text-green-600 font-bold">-8.3%</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                                <span class="text-gray-700">嘉信理财</span>
+                                <span class="text-green-600 font-bold">-7.4%</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                                <span class="text-gray-700">摩根士丹利</span>
+                                <span class="text-green-600 font-bold">-2%+</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fed Policy -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <span class="w-10 h-10 rounded-full bg-gradient-to-r from-green-500 to-teal-500 flex items-center justify-center text-white mr-3">
+                            🏛️
+                        </span>
+                        <h3 class="text-xl font-bold text-gray-800">美联储政策预期</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <p class="font-semibold text-gray-700 mb-2">降息预期升温</p>
+                            <p class="text-2xl font-bold text-green-600">70%+</p>
+                            <p class="text-sm text-gray-600">利率期货显示年中前降息概率</p>
+                        </div>
+                        <div class="space-y-2 text-sm text-gray-600">
+                            <p>• 零售数据转弱强化降息预期</p>
+                            <p>• 关注周三非农就业报告</p>
+                            <p>• 关注周五CPI通胀数据</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chinese Stocks -->
+        <section class="mb-10 animate-fade-in delay-3">
+            <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                <div class="flex items-center mb-6">
+                    <span class="w-10 h-10 rounded-full bg-gradient-to-r from-red-500 to-yellow-500 flex items-center justify-center text-white mr-3">
+                        🐉
+                    </span>
+                    <h3 class="text-xl font-bold text-gray-800">中概股表现</h3>
+                    <span class="ml-4 px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">纳斯达克中国金龙指数 +0.87%</span>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <div class="text-center p-4 bg-red-50 rounded-lg">
+                        <p class="font-semibold text-gray-700">阿里巴巴</p>
+                        <p class="text-lg font-bold text-red-600">+2.15%</p>
+                    </div>
+                    <div class="text-center p-4 bg-red-50 rounded-lg">
+                        <p class="font-semibold text-gray-700">京东</p>
+                        <p class="text-lg font-bold text-red-600">+1.21%</p>
+                    </div>
+                    <div class="text-center p-4 bg-red-50 rounded-lg">
+                        <p class="font-semibold text-gray-700">理想汽车</p>
+                        <p class="text-lg font-bold text-red-600">+2.94%</p>
+                    </div>
+                    <div class="text-center p-4 bg-red-50 rounded-lg">
+                        <p class="font-semibold text-gray-700">腾讯音乐</p>
+                        <p class="text-lg font-bold text-red-600">+3.75%</p>
+                    </div>
+                    <div class="text-center p-4 bg-yellow-50 rounded-lg">
+                        <p class="font-semibold text-gray-700">金龙指数</p>
+                        <p class="text-lg font-bold text-yellow-700">+0.87%</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market Chart -->
+        <section class="mb-10 animate-fade-in delay-4">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-green-500 to-teal-500 rounded mr-3"></span>
+                美股三大指数涨跌幅对比
+            </h2>
+            <div class="glass-effect rounded-2xl p-6 shadow-lg">
+                <canvas id="usMarketChart" height="100"></canvas>
+            </div>
+        </section>
+
+        <!-- Market Summary -->
+        <section class="mb-10 animate-fade-in delay-5">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-indigo-500 to-purple-500 rounded mr-3"></span>
+                市场总结与展望
+            </h2>
+            <div class="glass-effect rounded-2xl p-6 shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <h4 class="font-bold text-gray-800 mb-3 flex items-center">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                            强势板块
+                        </h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li class="flex items-center"><span class="text-green-500 mr-2">▲</span>道指成分股（价值股）</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">▲</span>特斯拉 (+1.89%)</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">▲</span>英伟达 (+0.79%)</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">▲</span>中概股整体</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 mb-3 flex items-center">
+                            <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
+                            弱势板块
+                        </h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li class="flex items-center"><span class="text-red-500 mr-2">▼</span>金融股（AI冲击担忧）</li>
+                            <li class="flex items-center"><span class="text-red-500 mr-2">▼</span>谷歌 (-1.77%)</li>
+                            <li class="flex items-center"><span class="text-red-500 mr-2">▼</span>Meta (-0.96%)</li>
+                            <li class="flex items-center"><span class="text-red-500 mr-2">▼</span>亚马逊 (-0.84%)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
+                    <p class="text-gray-700 mb-3"><strong>后市展望：</strong></p>
+                    <ul class="space-y-2 text-gray-600">
+                        <li>📅 <strong>周三非农就业报告</strong>：市场预期新增就业约7万人，将直接影响美联储政策预期</li>
+                        <li>📊 <strong>周五CPI通胀数据</strong>：将影响降息路径定价，是当前市场焦点</li>
+                        <li>🤖 <strong>AI投资可持续性</strong>：市场担忧巨额资本支出对现金流的挤压，谷歌$1850亿CAPEX引发讨论</li>
+                        <li>🔄 <strong>板块轮动持续</strong>：资金转向防御性板块，价值股跑赢成长股</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-10">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400">数据来源：新浪财经、财联社、Investing.com、Yahoo Finance、富途资讯</p>
+            <p class="text-gray-500 text-sm mt-2">本报告仅供参考，不构成投资建议 | 市场有风险，投资需谨慎</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const html = document.documentElement;
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            html.classList.add('dark');
+            themeIcon.textContent = '🌙';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            if (html.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+                themeIcon.textContent = '🌙';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeIcon.textContent = '☀️';
+            }
+        });
+
+        // Chart.js configuration
+        const ctx = document.getElementById('usMarketChart').getContext('2d');
+
+        // Chart colors for light/dark mode
+        const getChartColors = () => {
+            const isDark = html.classList.contains('dark');
+            return {
+                upBg: isDark ? 'rgba(239, 68, 68, 0.8)' : 'rgba(255, 107, 107, 0.8)',
+                downBg: isDark ? 'rgba(34, 197, 94, 0.8)' : 'rgba(78, 205, 196, 0.8)',
+                upBorder: isDark ? 'rgba(239, 68, 68, 1)' : 'rgba(255, 107, 107, 1)',
+                downBorder: isDark ? 'rgba(34, 197, 94, 1)' : 'rgba(78, 205, 196, 1)',
+                gridColor: isDark ? 'rgba(148, 163, 184, 0.2)' : 'rgba(0, 0, 0, 0.1)',
+                textColor: isDark ? '#94a3b8' : '#666'
+            };
+        };
+
+        const colors = getChartColors();
+        const usMarketChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['道琼斯', '标普500', '纳斯达克'],
+                datasets: [{
+                    label: '涨跌幅 (%)',
+                    data: [0.10, -0.33, -0.59],
+                    backgroundColor: [colors.upBg, colors.downBg, colors.downBg],
+                    borderColor: [colors.upBorder, colors.downBorder, colors.downBorder],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: colors.gridColor },
+                        ticks: {
+                            color: colors.textColor,
+                            callback: function(value) { return value + '%'; }
+                        }
+                    },
+                    x: {
+                        grid: { color: colors.gridColor },
+                        ticks: { color: colors.textColor }
+                    }
+                }
+            }
+        });
+
+        // Update chart when theme changes
+        themeToggle.addEventListener('click', () => {
+            const newColors = getChartColors();
+            usMarketChart.data.datasets[0].backgroundColor = [newColors.upBg, newColors.downBg, newColors.downBg];
+            usMarketChart.data.datasets[0].borderColor = [newColors.upBorder, newColors.downBorder, newColors.downBorder];
+            usMarketChart.options.scales.y.grid.color = newColors.gridColor;
+            usMarketChart.options.scales.y.ticks.color = newColors.textColor;
+            usMarketChart.options.scales.x.grid.color = newColors.gridColor;
+            usMarketChart.options.scales.x.ticks.color = newColors.textColor;
+            usMarketChart.update();
+        });
+    </script>
+</body>
+</html>
