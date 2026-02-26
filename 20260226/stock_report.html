@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026年2月26日 A股市场行情报告</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Noto Sans SC', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .up-gradient { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); }
+        .down-gradient { background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%); }
+        .neutral-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeInUp 0.6s ease-out forwards; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        .delay-6 { animation-delay: 0.6s; }
+
+        /* Dark Mode Styles */
+        html.dark body { background-color: #0f172a; color: #e2e8f0; }
+        html.dark .glass-effect {
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        html.dark h2, html.dark h3, html.dark h4 { color: #f1f5f9; }
+        html.dark .text-gray-800 { color: #f1f5f9; }
+        html.dark .text-gray-700 { color: #cbd5e1; }
+        html.dark .text-gray-600 { color: #94a3b8; }
+        html.dark .text-gray-500 { color: #64748b; }
+        html.dark .bg-gray-50 { background-color: rgba(51, 65, 85, 0.5); }
+        html.dark .bg-gray-100 { background-color: rgba(51, 65, 85, 0.8); }
+        html.dark .bg-gray-200 { background-color: rgba(71, 85, 105, 0.8); }
+        html.dark .bg-red-50 { background-color: rgba(127, 29, 29, 0.3); }
+        html.dark .bg-blue-50 { background-color: rgba(30, 58, 138, 0.3); }
+        html.dark .bg-green-50 { background-color: rgba(20, 83, 45, 0.3); }
+        html.dark .bg-yellow-100 { background-color: rgba(161, 98, 7, 0.3); }
+        html.dark .text-yellow-700 { color: #fcd34d; }
+        html.dark .bg-green-100 { background-color: rgba(22, 101, 52, 0.3); }
+        html.dark .text-green-700 { color: #86efac; }
+        html.dark .bg-red-100 { background-color: rgba(153, 27, 27, 0.3); }
+        html.dark .text-red-700 { color: #fca5a5; }
+        html.dark footer { background-color: #020617; }
+        html.dark .border-gray-200 { border-color: rgba(71, 85, 105, 0.5); }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        html.dark .theme-toggle {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" title="切换主题">
+        <span id="themeIcon">☀️</span>
+    </button>
+
+    <!-- Header -->
+    <header class="gradient-bg text-white py-8 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold mb-2">A股市场行情报告</h1>
+                    <p class="text-white/80 text-lg">2026年2月26日 星期四</p>
+                </div>
+                <div class="mt-4 md:mt-0 text-right">
+                    <p class="text-sm text-white/70">数据更新时间</p>
+                    <p class="text-xl font-semibold" id="updateTime">2026-02-26 15:30</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Market Overview -->
+        <section class="mb-10 animate-fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-purple-500 to-pink-500 rounded mr-3"></span>
+                大盘概览
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1">上证指数</p>
+                    <p class="text-2xl font-bold text-green-500">3385.36</p>
+                    <p class="text-sm text-green-500 font-medium">-0.01%</p>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1">深证成指</p>
+                    <p class="text-2xl font-bold text-red-500">10983.32</p>
+                    <p class="text-sm text-red-500 font-medium">+0.19%</p>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1">创业板指</p>
+                    <p class="text-2xl font-bold text-green-500">2246.79</p>
+                    <p class="text-sm text-green-500 font-medium">-0.29%</p>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1">科创50</p>
+                    <p class="text-2xl font-bold text-green-500">1093.14</p>
+                    <p class="text-sm text-green-500 font-medium">-0.52%</p>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1">恒生指数</p>
+                    <p class="text-2xl font-bold text-green-500">26381.02</p>
+                    <p class="text-sm text-green-500 font-medium">-1.44%</p>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1">恒生科技</p>
+                    <p class="text-2xl font-bold text-green-500">5109.33</p>
+                    <p class="text-sm text-green-500 font-medium">-2.87%</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Volume Info -->
+        <section class="mb-10 animate-fade-in delay-1">
+            <div class="glass-effect rounded-2xl p-6 shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div class="border-r border-gray-200 last:border-0">
+                        <p class="text-gray-500 mb-2">沪深两市成交额</p>
+                        <p class="text-3xl font-bold text-purple-600">2.54万亿</p>
+                        <p class="text-sm text-red-600 mt-1">放量758.98亿元</p>
+                    </div>
+                    <div class="border-r border-gray-200 last:border-0">
+                        <p class="text-gray-500 mb-2">涨跌家数</p>
+                        <p class="text-3xl font-bold text-gray-700">2485 : 2870</p>
+                        <p class="text-sm text-green-500 mt-1">78只涨停, 5只跌停</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-500 mb-2">市场情绪</p>
+                        <p class="text-3xl font-bold text-yellow-600">震荡分化</p>
+                        <p class="text-sm text-gray-500 mt-1">AI算力板块强势</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sector Analysis -->
+        <section class="mb-10 animate-fade-in delay-2">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-blue-500 to-cyan-500 rounded mr-3"></span>
+                重点板块分析
+            </h2>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                <!-- AI Computing -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white mr-3">
+                                AI
+                            </span>
+                            AI算力板块
+                        </h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">强势领涨</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">CPO概念</span>
+                            <span class="text-red-600 font-bold">+4.85%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">铜缆高速连接</span>
+                            <span class="text-red-600 font-bold">+3.92%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">液冷服务器</span>
+                            <span class="text-red-600 font-bold">+2.76%</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-600"><strong>市场要点：</strong>英伟达财报超预期刺激AI产业链，算力硬件需求持续旺盛。CPO、铜缆高速连接、光纤等细分赛道表现亮眼。</p>
+                    </div>
+                </div>
+
+                <!-- Semiconductor -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-white mr-3">
+                                半
+                            </span>
+                            半导体板块
+                        </h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">涨幅居前</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-blue-50 rounded-lg">
+                            <p class="text-sm text-gray-700"><strong>PCB概念：</strong>受益于AI服务器需求增长，PCB板块补涨明显</p>
+                        </div>
+                        <div class="p-3 bg-blue-50 rounded-lg">
+                            <p class="text-sm text-gray-700"><strong>国产替代：</strong>半导体设备、材料龙头受资金关注</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-600"><strong>市场要点：</strong>半导体板块随AI产业链走强，光模块产业链表现分化，先进封装方向受资金追捧。</p>
+                    </div>
+                </div>
+
+                <!-- Wind Equipment -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="w-10 h-10 rounded-full bg-gradient-to-r from-green-500 to-teal-500 flex items-center justify-center text-white mr-3">
+                                风
+                            </span>
+                            风电设备
+                        </h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">超跌反弹</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="text-center p-4 bg-gray-50 rounded-lg">
+                            <p class="text-3xl font-bold text-red-600">+2.3%</p>
+                            <p class="text-sm text-gray-500">板块涨幅</p>
+                        </div>
+                        <div class="text-center p-4 bg-gray-50 rounded-lg">
+                            <p class="text-3xl font-bold text-purple-600">政策</p>
+                            <p class="text-sm text-gray-500">利好预期</p>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-600"><strong>市场要点：</strong>海上风电项目审批加速，产业链排产预期改善，带动风电设备板块反弹。</p>
+                    </div>
+                </div>
+
+                <!-- AI Application Sector -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="w-10 h-10 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 flex items-center justify-center text-white mr-3">
+                                智
+                            </span>
+                            人工智能板块
+                        </h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">应用端活跃</span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">科大讯飞</span>
+                            <span class="text-red-600 font-bold">+2.85%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">寒武纪</span>
+                            <span class="text-red-600 font-bold">+4.12%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">云从科技</span>
+                            <span class="text-red-600 font-bold">+3.56%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">昆仑万维</span>
+                            <span class="text-red-600 font-bold">+2.94%</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-600"><strong>市场要点：</strong>AI应用端个股表现活跃，大模型商业化加速，带动相关标的上涨。科大讯飞、寒武纪等龙头受资金关注。</p>
+                    </div>
+                </div>
+
+                <!-- Semiconductor Equipment -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="w-10 h-10 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center text-white mr-3">
+                                备
+                            </span>
+                            半导体设备
+                        </h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">国产替代</span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">北方华创</span>
+                            <span class="text-red-600 font-bold">+3.28%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">中微公司</span>
+                            <span class="text-red-600 font-bold">+2.76%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">拓荆科技</span>
+                            <span class="text-red-600 font-bold">+4.05%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">芯源微</span>
+                            <span class="text-red-600 font-bold">+3.42%</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-600"><strong>市场要点：</strong>半导体设备龙头表现强势，国产替代逻辑持续强化。北方华创、中微公司等受益于晶圆厂扩产和国产设备渗透率提升。</p>
+                    </div>
+                </div>
+
+                <!-- Declining Sectors -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="w-10 h-10 rounded-full bg-gradient-to-r from-gray-500 to-slate-500 flex items-center justify-center text-white mr-3">
+                                跌
+                            </span>
+                            领跌板块
+                        </h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">调整明显</span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                            <span class="text-gray-700">影视院线</span>
+                            <span class="text-green-600 font-bold">-2.15%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                            <span class="text-gray-700">保险</span>
+                            <span class="text-green-600 font-bold">-1.82%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                            <span class="text-gray-700">房地产</span>
+                            <span class="text-green-600 font-bold">-1.56%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                            <span class="text-gray-700">汽车整车</span>
+                            <span class="text-green-600 font-bold">-1.23%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hang Seng Tech -->
+        <section class="mb-10 animate-fade-in delay-3">
+            <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                        <span class="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white mr-3">
+                            恒
+                        </span>
+                        恒生科技指数
+                    </h3>
+                    <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">-2.87%</span>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div class="text-center p-4 bg-gradient-to-br from-green-50 to-teal-50 rounded-lg">
+                        <p class="text-2xl font-bold text-green-600">5109.33</p>
+                        <p class="text-sm text-gray-500">收盘点位</p>
+                    </div>
+                    <div class="text-center p-4 bg-gradient-to-br from-green-50 to-teal-50 rounded-lg">
+                        <p class="text-2xl font-bold text-green-600">-151.11</p>
+                        <p class="text-sm text-gray-500">涨跌点数</p>
+                    </div>
+                    <div class="text-center p-4 bg-gradient-to-br from-green-50 to-teal-50 rounded-lg">
+                        <p class="text-2xl font-bold text-green-600">-2.87%</p>
+                        <p class="text-sm text-gray-500">涨跌幅</p>
+                    </div>
+                    <div class="text-center p-4 bg-gradient-to-br from-green-50 to-teal-50 rounded-lg">
+                        <p class="text-2xl font-bold text-purple-600">放量</p>
+                        <p class="text-sm text-gray-500">成交活跃</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="p-4 bg-green-50 rounded-lg">
+                        <p class="font-semibold text-gray-700 mb-2">领跌个股</p>
+                        <p class="text-sm text-gray-600">美团、京东、阿里等科网股普跌</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <p class="font-semibold text-gray-700 mb-2">南向资金</p>
+                        <p class="text-sm text-gray-600">港股通资金净流出</p>
+                    </div>
+                    <div class="p-4 bg-purple-50 rounded-lg">
+                        <p class="font-semibold text-gray-700 mb-2">市场情绪</p>
+                        <p class="text-sm text-gray-600">受外围市场波动影响</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market Summary Chart -->
+        <section class="mb-10 animate-fade-in delay-4">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-green-500 to-teal-500 rounded mr-3"></span>
+                涨跌幅对比
+            </h2>
+            <div class="glass-effect rounded-2xl p-6 shadow-lg">
+                <canvas id="marketChart" height="100"></canvas>
+            </div>
+        </section>
+
+        <!-- Summary -->
+        <section class="mb-10 animate-fade-in delay-5">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-red-500 to-orange-500 rounded mr-3"></span>
+                市场总结
+            </h2>
+            <div class="glass-effect rounded-2xl p-6 shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-bold text-gray-800 mb-3 flex items-center">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                            强势板块
+                        </h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li class="flex items-center"><span class="text-green-500 mr-2">▲</span>CPO概念（光模块）</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">▲</span>铜缆高速连接</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">▲</span>光纤光缆</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">▲</span>PCB概念</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">▲</span>液冷服务器</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">▲</span>风电设备</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">▲</span>人工智能应用端</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">▲</span>半导体设备</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 mb-3 flex items-center">
+                            <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
+                            弱势板块
+                        </h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li class="flex items-center"><span class="text-red-500 mr-2">▼</span>影视院线</li>
+                            <li class="flex items-center"><span class="text-red-500 mr-2">▼</span>保险板块</li>
+                            <li class="flex items-center"><span class="text-red-500 mr-2">▼</span>房地产</li>
+                            <li class="flex items-center"><span class="text-red-500 mr-2">▼</span>短剧游戏</li>
+                            <li class="flex items-center"><span class="text-red-500 mr-2">▼</span>汽车整车</li>
+                            <li class="flex items-center"><span class="text-red-500 mr-2">▼</span>贵金属</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
+                    <p class="text-gray-700"><strong>后市展望：</strong>A股延续震荡分化格局，成交额维持在2.5万亿以上，市场交投活跃。AI算力产业链持续强势，CPO、铜缆高速连接等细分赛道领涨。港股方面，恒生科技指数大幅调整，科网股普跌。短期内关注AI产业链持续性及港股企稳信号。</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-10">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400">数据来源：财联社、证券时报、新浪财经、同花顺、东方财富</p>
+            <p class="text-gray-500 text-sm mt-2">本报告仅供参考，不构成投资建议</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const html = document.documentElement;
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            html.classList.add('dark');
+            themeIcon.textContent = '🌙';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            if (html.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+                themeIcon.textContent = '🌙';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeIcon.textContent = '☀️';
+            }
+        });
+
+        // Chart.js configuration
+        const ctx = document.getElementById('marketChart').getContext('2d');
+
+        // Chart colors for light/dark mode
+        const getChartColors = () => {
+            const isDark = html.classList.contains('dark');
+            return {
+                upBg: isDark ? 'rgba(239, 68, 68, 0.8)' : 'rgba(255, 107, 107, 0.8)',
+                downBg: isDark ? 'rgba(34, 197, 94, 0.8)' : 'rgba(78, 205, 196, 0.8)',
+                upBorder: isDark ? 'rgba(239, 68, 68, 1)' : 'rgba(255, 107, 107, 1)',
+                downBorder: isDark ? 'rgba(34, 197, 94, 1)' : 'rgba(78, 205, 196, 1)',
+                gridColor: isDark ? 'rgba(148, 163, 184, 0.2)' : 'rgba(0, 0, 0, 0.1)',
+                textColor: isDark ? '#94a3b8' : '#666'
+            };
+        };
+
+        const colors = getChartColors();
+        const marketChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['上证指数', '深证成指', '创业板指', '科创50', '恒生指数', '恒生科技'],
+                datasets: [{
+                    label: '涨跌幅 (%)',
+                    data: [-0.01, 0.19, -0.29, -0.52, -1.44, -2.87],
+                    backgroundColor: [
+                        colors.downBg, colors.upBg, colors.downBg,
+                        colors.downBg, colors.downBg, colors.downBg
+                    ],
+                    borderColor: [
+                        colors.downBorder, colors.upBorder, colors.downBorder,
+                        colors.downBorder, colors.downBorder, colors.downBorder
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: colors.gridColor
+                        },
+                        ticks: {
+                            color: colors.textColor,
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: colors.gridColor
+                        },
+                        ticks: {
+                            color: colors.textColor
+                        }
+                    }
+                }
+            }
+        });
+
+        // Update chart when theme changes
+        themeToggle.addEventListener('click', () => {
+            const newColors = getChartColors();
+            marketChart.data.datasets[0].backgroundColor = [
+                newColors.downBg, newColors.upBg, newColors.downBg,
+                newColors.downBg, newColors.downBg, newColors.downBg
+            ];
+            marketChart.data.datasets[0].borderColor = [
+                newColors.downBorder, newColors.upBorder, newColors.downBorder,
+                newColors.downBorder, newColors.downBorder, newColors.downBorder
+            ];
+            marketChart.options.scales.y.grid.color = newColors.gridColor;
+            marketChart.options.scales.y.ticks.color = newColors.textColor;
+            marketChart.options.scales.x.grid.color = newColors.gridColor;
+            marketChart.options.scales.x.ticks.color = newColors.textColor;
+            marketChart.update();
+        });
+    </script>
+</body>
+</html>
