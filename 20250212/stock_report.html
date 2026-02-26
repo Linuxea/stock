@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025年2月12日 A股市场行情报告</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Noto Sans SC', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .up-gradient { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); }
+        .down-gradient { background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeInUp 0.6s ease-out forwards; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+
+        /* Dark Mode Styles */
+        html.dark body { background-color: #0f172a; color: #e2e8f0; }
+        html.dark .glass-effect {
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" title="切换主题">
+        <span id="themeIcon">☀️</span>
+    </button>
+
+    <header class="gradient-bg text-white py-8 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold mb-2">A股市场行情报告</h1>
+                    <p class="text-white/80 text-lg">2025年2月12日 星期三</p>
+                </div>
+                <div class="mt-4 md:mt-0 text-right">
+                    <p class="text-sm text-white/70">数据更新时间</p>
+                    <p class="text-xl font-semibold">2025-02-12 15:30</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- 大盘概览 -->
+        <section class="mb-10 animate-fade-in">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center dark:text-gray-100">
+                <span class="w-1 h-8 bg-gradient-to-b from-purple-500 to-pink-500 rounded mr-3"></span>
+                大盘概览
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1 dark:text-gray-400">上证指数</p>
+                    <p class="text-2xl font-bold text-red-500">3,346.39</p>
+                    <p class="text-sm text-red-500 font-medium">+0.85%</p>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1 dark:text-gray-400">深证成指</p>
+                    <p class="text-2xl font-bold text-red-500">10,708.88</p>
+                    <p class="text-sm text-red-500 font-medium">+1.43%</p>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1 dark:text-gray-400">创业板指</p>
+                    <p class="text-2xl font-bold text-red-500">2,191.76</p>
+                    <p class="text-sm text-red-500 font-medium">+1.81%</p>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1 dark:text-gray-400">科创50</p>
+                    <p class="text-2xl font-bold text-red-500">1,041.14</p>
+                    <p class="text-sm text-red-500 font-medium">+1.63%</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 成交额概览 -->
+        <section class="mb-10 animate-fade-in delay-1">
+            <div class="glass-effect rounded-2xl p-6 shadow-lg">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 dark:text-gray-100">成交额概览</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="text-center p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl dark:from-purple-900/20 dark:to-pink-900/20">
+                        <p class="text-3xl font-bold text-purple-600 dark:text-purple-400">3,746.87亿</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">沪市成交额</p>
+                    </div>
+                    <div class="text-center p-4 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl dark:from-blue-900/20 dark:to-cyan-900/20">
+                        <p class="text-3xl font-bold text-blue-600 dark:text-blue-400">6,251.72亿</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">深市成交额</p>
+                    </div>
+                    <div class="text-center p-4 bg-gradient-to-br from-orange-50 to-red-50 rounded-xl dark:from-orange-900/20 dark:to-red-900/20">
+                        <p class="text-3xl font-bold text-orange-600 dark:text-orange-400">1.68万亿</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">两市合计</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 板块分析 -->
+        <section class="mb-10 animate-fade-in delay-2">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center dark:text-gray-100">
+                <span class="w-1 h-8 bg-gradient-to-b from-purple-500 to-pink-500 rounded mr-3"></span>
+                重点板块分析
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- 领涨板块 -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center dark:text-gray-100">
+                            <span class="w-10 h-10 rounded-full up-gradient flex items-center justify-center text-white mr-3">📈</span>
+                            领涨板块
+                        </h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700 dark:bg-red-900/30">强势上涨</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                            <span class="text-gray-700 dark:text-gray-300">电力设备</span>
+                            <span class="text-red-600 font-bold">+3.74%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                            <span class="text-gray-700 dark:text-gray-300">非金属材料</span>
+                            <span class="text-red-600 font-bold">+1.47%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                            <span class="text-gray-700 dark:text-gray-300">互联网服务</span>
+                            <span class="text-red-600 font-bold">+1.40%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                            <span class="text-gray-700 dark:text-gray-300">软件开发</span>
+                            <span class="text-red-600 font-bold">+1.38%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 领跌板块 -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center dark:text-gray-100">
+                            <span class="w-10 h-10 rounded-full down-gradient flex items-center justify-center text-white mr-3">📉</span>
+                            领跌板块
+                        </h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700 dark:bg-green-900/30">回调休整</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                            <span class="text-gray-700 dark:text-gray-300">贵金属</span>
+                            <span class="text-green-600 font-bold">-2.17%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                            <span class="text-gray-700 dark:text-gray-300">珠宝</span>
+                            <span class="text-green-600 font-bold">-1.21%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                            <span class="text-gray-700 dark:text-gray-300">采矿</span>
+                            <span class="text-green-600 font-bold">-0.99%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                            <span class="text-gray-700 dark:text-gray-300">美容护理</span>
+                            <span class="text-green-600 font-bold">-0.97%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 图表区域 -->
+        <section class="mb-10 animate-fade-in delay-3">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center dark:text-gray-100">
+                <span class="w-1 h-8 bg-gradient-to-b from-purple-500 to-pink-500 rounded mr-3"></span>
+                市场涨跌分布
+            </h2>
+            <div class="glass-effect rounded-2xl p-6 shadow-lg">
+                <canvas id="marketChart" height="100"></canvas>
+            </div>
+        </section>
+
+        <!-- 港股联动 -->
+        <section class="mb-10 animate-fade-in delay-4">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center dark:text-gray-100">
+                <span class="w-1 h-8 bg-gradient-to-b from-purple-500 to-pink-500 rounded mr-3"></span>
+                港股联动
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1 dark:text-gray-400">恒生指数</p>
+                    <p class="text-2xl font-bold text-red-500">21,857.92</p>
+                    <p class="text-sm text-red-500 font-medium">+2.64%</p>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1 dark:text-gray-400">恒生科技指数</p>
+                    <p class="text-2xl font-bold text-red-500">—</p>
+                    <p class="text-sm text-red-500 font-medium">+2.70%</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 市场总结 -->
+        <section class="mb-10 animate-fade-in delay-5">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center dark:text-gray-100">
+                <span class="w-1 h-8 bg-gradient-to-b from-purple-500 to-pink-500 rounded mr-3"></span>
+                市场总结
+            </h2>
+            <div class="glass-effect rounded-2xl p-6 shadow-lg">
+                <div class="prose dark:prose-invert max-w-none">
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                        <strong class="text-purple-600 dark:text-purple-400">今日A股三大指数全线收涨</strong>，市场情绪积极。创业板指领涨（+1.81%），科创50涨幅达1.63%，显示科技股受到资金青睐。
+                    </p>
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed mt-4">
+                        <strong>板块表现：</strong>电力设备板块大幅领涨（+3.74%），互联网服务、软件开发等科技板块表现活跃。相比之下，贵金属、珠宝等避险资产回调，反映市场风险偏好提升。
+                    </p>
+                    <p class="text-gray-700 dark:text-gray-300 leading-relaxed mt-4">
+                        <strong>成交情况：</strong>沪深两市合计成交约1.68万亿元，市场交投活跃。港股市场同样表现强劲，恒生指数大涨2.64%，与A股形成良好共振。
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 mt-10">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400">数据来源：财联社、证券时报、新浪财经、同花顺、东方财富</p>
+            <p class="text-gray-500 text-sm mt-2">本报告仅供参考，不构成投资建议 | 市场有风险，投资需谨慎</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const html = document.documentElement;
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            html.classList.add('dark');
+            themeIcon.textContent = '🌙';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            if (html.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+                themeIcon.textContent = '🌙';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeIcon.textContent = '☀️';
+            }
+        });
+
+        // Chart.js configuration
+        const ctx = document.getElementById('marketChart').getContext('2d');
+
+        // Chart colors for light/dark mode (A股：红涨绿跌)
+        const getChartColors = () => {
+            const isDark = html.classList.contains('dark');
+            return {
+                upBg: isDark ? 'rgba(239, 68, 68, 0.8)' : 'rgba(255, 107, 107, 0.8)',
+                downBg: isDark ? 'rgba(34, 197, 94, 0.8)' : 'rgba(78, 205, 196, 0.8)',
+                upBorder: isDark ? 'rgba(239, 68, 68, 1)' : 'rgba(255, 107, 107, 1)',
+                downBorder: isDark ? 'rgba(34, 197, 94, 1)' : 'rgba(78, 205, 196, 1)',
+                gridColor: isDark ? 'rgba(148, 163, 184, 0.2)' : 'rgba(0, 0, 0, 0.1)',
+                textColor: isDark ? '#94a3b8' : '#666'
+            };
+        };
+
+        const colors = getChartColors();
+        const marketChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['上证指数', '深证成指', '创业板指', '科创50', '恒生指数', '恒生科技'],
+                datasets: [{
+                    label: '涨跌幅 (%)',
+                    data: [0.85, 1.43, 1.81, 1.63, 2.64, 2.70],
+                    backgroundColor: [
+                        colors.upBg, colors.upBg, colors.upBg,
+                        colors.upBg, colors.upBg, colors.upBg
+                    ],
+                    borderColor: [
+                        colors.upBorder, colors.upBorder, colors.upBorder,
+                        colors.upBorder, colors.upBorder, colors.upBorder
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: colors.gridColor },
+                        ticks: {
+                            color: colors.textColor,
+                            callback: function(value) { return value + '%'; }
+                        }
+                    },
+                    x: {
+                        grid: { color: colors.gridColor },
+                        ticks: { color: colors.textColor }
+                    }
+                }
+            }
+        });
+
+        // Update chart when theme changes
+        themeToggle.addEventListener('click', () => {
+            const newColors = getChartColors();
+            marketChart.data.datasets[0].backgroundColor = [
+                newColors.upBg, newColors.upBg, newColors.upBg,
+                newColors.upBg, newColors.upBg, newColors.upBg
+            ];
+            marketChart.data.datasets[0].borderColor = [
+                newColors.upBorder, newColors.upBorder, newColors.upBorder,
+                newColors.upBorder, newColors.upBorder, newColors.upBorder
+            ];
+            marketChart.options.scales.y.grid.color = newColors.gridColor;
+            marketChart.options.scales.y.ticks.color = newColors.textColor;
+            marketChart.options.scales.x.grid.color = newColors.gridColor;
+            marketChart.options.scales.x.ticks.color = newColors.textColor;
+            marketChart.update();
+        });
+    </script>
+</body>
+</html>
