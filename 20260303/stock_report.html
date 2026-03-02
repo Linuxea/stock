@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026年3月3日 A股市场行情报告</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Noto Sans SC', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .up-gradient { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); }
+        .down-gradient { background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%); }
+        .neutral-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeInUp 0.6s ease-out forwards; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        .delay-6 { animation-delay: 0.6s; }
+
+        /* Dark Mode Styles */
+        html.dark body { background-color: #0f172a; color: #e2e8f0; }
+        html.dark .glass-effect {
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        html.dark h2, html.dark h3, html.dark h4 { color: #f1f5f9; }
+        html.dark .text-gray-800 { color: #f1f5f9; }
+        html.dark .text-gray-700 { color: #cbd5e1; }
+        html.dark .text-gray-600 { color: #94a3b8; }
+        html.dark .text-gray-500 { color: #64748b; }
+        html.dark .bg-gray-50 { background-color: rgba(51, 65, 85, 0.5); }
+        html.dark .bg-gray-100 { background-color: rgba(51, 65, 85, 0.8); }
+        html.dark .bg-gray-200 { background-color: rgba(71, 85, 105, 0.8); }
+        html.dark .bg-red-50 { background-color: rgba(127, 29, 29, 0.3); }
+        html.dark .bg-blue-50 { background-color: rgba(30, 58, 138, 0.3); }
+        html.dark .bg-green-50 { background-color: rgba(20, 83, 45, 0.3); }
+        html.dark .bg-yellow-100 { background-color: rgba(161, 98, 7, 0.3); }
+        html.dark .text-yellow-700 { color: #fcd34d; }
+        html.dark .bg-green-100 { background-color: rgba(22, 101, 52, 0.3); }
+        html.dark .text-green-700 { color: #86efac; }
+        html.dark .bg-red-100 { background-color: rgba(153, 27, 27, 0.3); }
+        html.dark .text-red-700 { color: #fca5a5; }
+        html.dark footer { background-color: #020617; }
+        html.dark .border-gray-200 { border-color: rgba(71, 85, 105, 0.5); }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        html.dark .theme-toggle {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" title="切换主题">
+        <span id="themeIcon">☀️</span>
+    </button>
+
+    <!-- Header -->
+    <header class="gradient-bg text-white py-8 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold mb-2">A股市场行情报告</h1>
+                    <p class="text-white/80 text-lg">2026年3月3日 星期二 | 3月首个交易日</p>
+                </div>
+                <div class="mt-4 md:mt-0 text-right">
+                    <p class="text-sm text-white/70">数据更新时间</p>
+                    <p class="text-xl font-semibold" id="updateTime">2026-03-03 15:30</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Monthly Performance Banner -->
+        <section class="mb-10 animate-fade-in">
+            <div class="glass-effect rounded-2xl p-6 shadow-lg bg-gradient-to-r from-purple-100 to-pink-100">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">📊 2026年3月市场表现（月初）</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div>
+                        <p class="text-2xl font-bold text-red-600">+1.09%</p>
+                        <p class="text-gray-600">上证指数</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-red-600">+2.04%</p>
+                        <p class="text-gray-600">深证成指</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-green-600">-1.08%</p>
+                        <p class="text-gray-600">创业板指</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market Overview -->
+        <section class="mb-10 animate-fade-in delay-1">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-purple-500 to-pink-500 rounded mr-3"></span>
+                大盘概览
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1">上证指数</p>
+                    <p class="text-2xl font-bold text-red-500">4182.59</p>
+                    <p class="text-sm text-red-500 font-medium">+0.47%</p>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1">深证成指</p>
+                    <p class="text-2xl font-bold text-green-500">14465.79</p>
+                    <p class="text-sm text-green-500 font-medium">-0.20%</p>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1">创业板指</p>
+                    <p class="text-2xl font-bold text-green-500">3294.16</p>
+                    <p class="text-sm text-green-500 font-medium">-0.49%</p>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1">科创50</p>
+                    <p class="text-2xl font-bold text-red-500">1085.42</p>
+                    <p class="text-sm text-red-500 font-medium">+0.35%</p>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1">恒生指数</p>
+                    <p class="text-2xl font-bold text-red-500">26059.85</p>
+                    <p class="text-sm text-red-500 font-medium">-2.14%</p>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1">恒生科技</p>
+                    <p class="text-2xl font-bold text-red-500">4989.37</p>
+                    <p class="text-sm text-red-500 font-medium">-2.89%</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Volume Info -->
+        <section class="mb-10 animate-fade-in delay-2">
+            <div class="glass-effect rounded-2xl p-6 shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div class="border-r border-gray-200 last:border-0">
+                        <p class="text-gray-500 mb-2">沪深两市成交额</p>
+                        <p class="text-3xl font-bold text-purple-600">3.02万亿</p>
+                        <p class="text-sm text-green-600 mt-1">放量约5327亿元</p>
+                    </div>
+                    <div class="border-r border-gray-200 last:border-0">
+                        <p class="text-gray-500 mb-2">涨跌家数</p>
+                        <p class="text-3xl font-bold text-gray-700">1000 : 4200</p>
+                        <p class="text-sm text-red-500 mt-1">45只涨停, 12只跌停</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-500 mb-2">市场情绪</p>
+                        <p class="text-3xl font-bold text-yellow-600">分化调整</p>
+                        <p class="text-sm text-gray-500 mt-1">石油、有色金属板块领涨</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sector Analysis -->
+        <section class="mb-10 animate-fade-in delay-3">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-blue-500 to-cyan-500 rounded mr-3"></span>
+                重点板块分析
+            </h2>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                <!-- Rare Earth & Non-ferrous Metals -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="w-10 h-10 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 flex items-center justify-center text-white mr-3">
+                                稀
+                            </span>
+                            稀土/有色金属
+                        </h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">强势领涨</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">小金属板块</span>
+                            <span class="text-red-600 font-bold">+5.23%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">稀土永磁</span>
+                            <span class="text-red-600 font-bold">+3.65%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">金属锌</span>
+                            <span class="text-red-600 font-bold">+3.21%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">铜概念</span>
+                            <span class="text-red-600 font-bold">+2.95%</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-600"><strong>市场要点：</strong>3月小金属板块累计大涨5.23%，领跑全市场。稀土、有色金属受益于新能源需求预期和供给收缩，资金持续流入。</p>
+                    </div>
+                </div>
+
+                <!-- Oil & Gas -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="w-10 h-10 rounded-full bg-gradient-to-r from-gray-700 to-gray-900 flex items-center justify-center text-white mr-3">
+                                油
+                            </span>
+                            油气开采服务
+                        </h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">涨幅居前</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="text-center p-4 bg-gray-50 rounded-lg">
+                            <p class="text-3xl font-bold text-red-600">+3.15%</p>
+                            <p class="text-sm text-gray-500">板块涨幅</p>
+                        </div>
+                        <div class="text-center p-4 bg-gray-50 rounded-lg">
+                            <p class="text-3xl font-bold text-purple-600">+25.10%</p>
+                            <p class="text-sm text-gray-500">月累计涨幅</p>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-600"><strong>市场要点：</strong>石油板块受中东局势影响，3月累计涨幅居市场前列。国际油价维持高位，叠加国内能源安全战略，油气开采服务企业业绩预期改善。</p>
+                    </div>
+                </div>
+
+                <!-- Battery & New Energy -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="w-10 h-10 rounded-full bg-gradient-to-r from-green-500 to-teal-500 flex items-center justify-center text-white mr-3">
+                                电
+                            </span>
+                            BC电池/新能源
+                        </h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">反弹持续</span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">BC电池概念</span>
+                            <span class="text-red-600 font-bold">+2.68%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">光伏设备</span>
+                            <span class="text-red-600 font-bold">+1.85%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">锂电池</span>
+                            <span class="text-red-600 font-bold">+1.42%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">储能</span>
+                            <span class="text-red-600 font-bold">+0.98%</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-600"><strong>市场要点：</strong>BC电池概念2月累计涨14.8%，光伏板块受政策预期和行业去产能消息影响，部分龙头企业率先反弹。</p>
+                    </div>
+                </div>
+
+                <!-- Fiber Optic -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="w-10 h-10 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center text-white mr-3">
+                                光
+                            </span>
+                            光纤概念
+                        </h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">月涨幅靠前</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="text-center p-4 bg-gray-50 rounded-lg">
+                            <p class="text-3xl font-bold text-red-600">+1.95%</p>
+                            <p class="text-sm text-gray-500">今日涨幅</p>
+                        </div>
+                        <div class="text-center p-4 bg-gray-50 rounded-lg">
+                            <p class="text-3xl font-bold text-purple-600">+14.83%</p>
+                            <p class="text-sm text-gray-500">月累计涨幅</p>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-600"><strong>市场要点：</strong>光纤概念受益于AI数据中心建设和5G网络升级需求，2月表现亮眼。光缆、光模块产业链持续受益。</p>
+                    </div>
+                </div>
+
+                <!-- Declining Sectors -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="w-10 h-10 rounded-full bg-gradient-to-r from-gray-500 to-slate-500 flex items-center justify-center text-white mr-3">
+                                跌
+                            </span>
+                            领跌板块
+                        </h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">月内调整</span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                            <span class="text-gray-700">科创次新股</span>
+                            <span class="text-green-600 font-bold">-5.87% (月)</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                            <span class="text-gray-700">免税店概念</span>
+                            <span class="text-green-600 font-bold">-4.73% (月)</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                            <span class="text-gray-700">食品加工</span>
+                            <span class="text-green-600 font-bold">-4.30% (月)</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                            <span class="text-gray-700">DRG/DIP</span>
+                            <span class="text-green-600 font-bold">-4.62% (月)</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-600"><strong>市场要点：</strong>消费类板块2月表现疲软，免税店、食品加工等板块受消费复苏节奏影响，资金流出明显。</p>
+                    </div>
+                </div>
+
+                <!-- Top Performers -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="w-10 h-10 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 flex items-center justify-center text-white mr-3">
+                                牛
+                            </span>
+                            月度牛股
+                        </h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">2月涨幅榜</span>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">电科蓝天</span>
+                            <span class="text-red-600 font-bold">+640.97%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">爱得科技</span>
+                            <span class="text-red-600 font-bold">+153.46%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">海圣医疗</span>
+                            <span class="text-red-600 font-bold">+149.92%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">北芯生命</span>
+                            <span class="text-red-600 font-bold">+135.05%</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-600"><strong>市场要点：</strong>次新股和医疗板块个股2月表现突出。电科蓝天涨幅超6倍，医疗板块受益于政策利好和创新药进展。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market Summary Chart -->
+        <section class="mb-10 animate-fade-in delay-4">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-green-500 to-teal-500 rounded mr-3"></span>
+                3月主要指数涨跌幅
+            </h2>
+            <div class="glass-effect rounded-2xl p-6 shadow-lg">
+                <canvas id="marketChart" height="100"></canvas>
+            </div>
+        </section>
+
+        <!-- Summary -->
+        <section class="mb-10 animate-fade-in delay-5">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-red-500 to-orange-500 rounded mr-3"></span>
+                市场总结与展望
+            </h2>
+            <div class="glass-effect rounded-2xl p-6 shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-bold text-gray-800 mb-3 flex items-center">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                            3月强势板块
+                        </h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li class="flex items-center"><span class="text-green-500 mr-2">▲</span>小金属 (+24.71%)</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">▲</span>油气开采及服务 (+21.44%)</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">▲</span>金属锌 (+17.23%)</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">▲</span>光纤概念 (+14.83%)</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">▲</span>BC电池 (+14.8%)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-gray-800 mb-3 flex items-center">
+                            <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
+                            3月弱势板块
+                        </h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li class="flex items-center"><span class="text-red-500 mr-2">▼</span>科创次新股 (-5.87%)</li>
+                            <li class="flex items-center"><span class="text-red-500 mr-2">▼</span>免税店 (-4.73%)</li>
+                            <li class="flex items-center"><span class="text-red-500 mr-2">▼</span>DRG/DIP (-4.62%)</li>
+                            <li class="flex items-center"><span class="text-red-500 mr-2">▼</span>电子 (-4.41%)</li>
+                            <li class="flex items-center"><span class="text-red-500 mr-2">▼</span>食品加工 (-4.30%)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
+                    <p class="text-gray-700"><strong>后市展望：</strong>3月首个交易日A股呈现分化行情，上证指数、深证成指三连阳收官，但创业板指受新能源龙头拖累月内收跌。3月行情即将开启，从历史数据看沪指3月平均上涨2.1%，小微盘、红利指数表现较优。短期关注两会政策预期、AI产业链持续性以及大宗商品价格波动。</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-10">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400">数据来源：财联社、证券时报、新浪财经、同花顺、东方财富</p>
+            <p class="text-gray-500 text-sm mt-2">本报告仅供参考，不构成投资建议</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const html = document.documentElement;
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            html.classList.add('dark');
+            themeIcon.textContent = '🌙';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            if (html.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+                themeIcon.textContent = '🌙';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeIcon.textContent = '☀️';
+            }
+            updateChartColors();
+        });
+
+        // Chart.js - Monthly Performance
+        const ctx = document.getElementById('marketChart').getContext('2d');
+        let marketChart;
+
+        function getChartColors() {
+            const isDark = html.classList.contains('dark');
+            return {
+                textColor: isDark ? '#e2e8f0' : '#374151',
+                gridColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                upColor: '#ff6b6b',
+                downColor: '#4ecdc4'
+            };
+        }
+
+        function initChart() {
+            const colors = getChartColors();
+            marketChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['上证指数', '深证成指', '创业板指', '科创50', '小金属', '油气开采', 'BC电池', '光纤概念'],
+                    datasets: [{
+                        label: '2月涨跌幅 (%)',
+                        data: [1.09, 2.04, -1.08, 0.35, 24.71, 21.44, 14.8, 14.83],
+                        backgroundColor: [
+                            '#ff6b6b', '#ff6b6b', '#4ecdc4', '#ff6b6b',
+                            '#ff6b6b', '#ff6b6b', '#ff6b6b', '#ff6b6b'
+                        ],
+                        borderRadius: 8,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + '%';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: colors.gridColor },
+                            ticks: {
+                                color: colors.textColor,
+                                callback: function(value) { return value + '%'; }
+                            }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: colors.textColor }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChartColors() {
+            if (!marketChart) return;
+            const colors = getChartColors();
+            marketChart.options.scales.y.grid.color = colors.gridColor;
+            marketChart.options.scales.y.ticks.color = colors.textColor;
+            marketChart.options.scales.x.ticks.color = colors.textColor;
+            marketChart.update();
+        }
+
+        initChart();
+    </script>
+</body>
+</html>
