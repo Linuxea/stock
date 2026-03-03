@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026年3月3日 A股市场行情报告</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Noto Sans SC', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .up-gradient { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); }
+        .down-gradient { background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%); }
+        .neutral-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeInUp 0.6s ease-out forwards; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        .delay-6 { animation-delay: 0.6s; }
+
+        /* Dark Mode Styles */
+        html.dark body { background-color: #0f172a; color: #e2e8f0; }
+        html.dark .glass-effect {
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        html.dark h2, html.dark h3, html.dark h4 { color: #f1f5f9; }
+        html.dark .text-gray-800 { color: #f1f5f9; }
+        html.dark .text-gray-700 { color: #cbd5e1; }
+        html.dark .text-gray-600 { color: #94a3b8; }
+        html.dark .text-gray-500 { color: #64748b; }
+        html.dark .bg-gray-50 { background-color: rgba(51, 65, 85, 0.5); }
+        html.dark .bg-gray-100 { background-color: rgba(51, 65, 85, 0.8); }
+        html.dark .bg-gray-200 { background-color: rgba(71, 85, 105, 0.8); }
+        html.dark .bg-red-50 { background-color: rgba(127, 29, 29, 0.3); }
+        html.dark .bg-blue-50 { background-color: rgba(30, 58, 138, 0.3); }
+        html.dark .bg-green-50 { background-color: rgba(20, 83, 45, 0.3); }
+        html.dark .bg-yellow-100 { background-color: rgba(161, 98, 7, 0.3); }
+        html.dark .text-yellow-700 { color: #fcd34d; }
+        html.dark .bg-green-100 { background-color: rgba(22, 101, 52, 0.3); }
+        html.dark .text-green-700 { color: #86efac; }
+        html.dark .bg-red-100 { background-color: rgba(153, 27, 27, 0.3); }
+        html.dark .text-red-700 { color: #fca5a5; }
+        html.dark footer { background-color: #020617; }
+        html.dark .border-gray-200 { border-color: rgba(71, 85, 105, 0.5); }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+        html.dark .theme-toggle {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" title="切换主题">
+        <span id="themeIcon">☀️</span>
+    </button>
+
+    <!-- Header -->
+    <header class="gradient-bg text-white py-8 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold mb-2">A股市场行情报告</h1>
+                    <p class="text-white/80 text-lg">2026年3月3日 星期二 | 结构性分化与巨量震荡</p>
+                </div>
+                <div class="mt-4 md:mt-0 text-right">
+                    <p class="text-sm text-white/70">数据更新时间</p>
+                    <p class="text-xl font-semibold" id="updateTime">2026-03-03 15:30</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Daily Performance Banner -->
+        <section class="mb-10 animate-fade-in">
+            <div class="glass-effect rounded-2xl p-6 shadow-lg bg-gradient-to-r from-blue-100 to-green-100">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">📊 今日市场表现核心摘要</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div>
+                        <p class="text-2xl font-bold text-green-600">-1.43%</p>
+                        <p class="text-gray-600">上证指数</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-green-600">-3.07%</p>
+                        <p class="text-gray-600">深证成指</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-green-600">-2.57%</p>
+                        <p class="text-gray-600">创业板指</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market Overview -->
+        <section class="mb-10 animate-fade-in delay-1">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-purple-500 to-pink-500 rounded mr-3"></span>
+                大盘概览
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1">上证指数</p>
+                    <p class="text-2xl font-bold text-green-500">4122.68</p>
+                    <p class="text-sm text-green-500 font-medium">-1.43%</p>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1">深证成指</p>
+                    <p class="text-2xl font-bold text-green-500">14022.39</p>
+                    <p class="text-sm text-green-500 font-medium">-3.07%</p>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1">创业板指</p>
+                    <p class="text-2xl font-bold text-green-500">3209.48</p>
+                    <p class="text-sm text-green-500 font-medium">-2.57%</p>
+                </div>
+                <div class="glass-effect rounded-xl p-4 card-hover shadow-md">
+                    <p class="text-sm text-gray-500 mb-1">科创50</p>
+                    <p class="text-2xl font-bold text-green-500">1729.17</p>
+                    <p class="text-sm text-green-500 font-medium">-5.38%</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Volume Info -->
+        <section class="mb-10 animate-fade-in delay-2">
+            <div class="glass-effect rounded-2xl p-6 shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div class="border-r border-gray-200 last:border-0">
+                        <p class="text-gray-500 mb-2">沪深两市成交额</p>
+                        <p class="text-3xl font-bold text-purple-600">3.05万亿</p>
+                        <p class="text-sm text-red-600 mt-1">天量巨震！放量约5403亿元</p>
+                    </div>
+                    <div class="border-r border-gray-200 last:border-0">
+                        <p class="text-gray-500 mb-2">涨跌家数</p>
+                        <p class="text-3xl font-bold text-gray-700">~1000 : 4300</p>
+                        <p class="text-sm text-green-500 mt-1">普跌格局，高位股回落</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-500 mb-2">市场情绪</p>
+                        <p class="text-3xl font-bold text-yellow-600">避险升温</p>
+                        <p class="text-sm text-gray-500 mt-1">油气、黄金等资源股获追捧</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sector Analysis -->
+        <section class="mb-10 animate-fade-in delay-3">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-blue-500 to-cyan-500 rounded mr-3"></span>
+                重点板块跟踪
+            </h2>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                <!-- Oil & Gas -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="w-10 h-10 rounded-full bg-gradient-to-r from-gray-700 to-gray-900 flex items-center justify-center text-white mr-3">
+                                油
+                            </span>
+                            油气开采及设备
+                        </h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">历史级爆发</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">中国石油等"三桶油"</span>
+                            <span class="text-red-600 font-bold">集体涨停！</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">通源石油等十余股</span>
+                            <span class="text-red-600 font-bold">封死涨停板</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-600"><strong>市场脉络：</strong>受中东地缘政治急剧升温（美以突击伊朗等因素）影响，国际油价飙升，资金疯狂涌入传统能源和油气装备板块避险。</p>
+                    </div>
+                </div>
+
+                <!-- Precious Metals -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="w-10 h-10 rounded-full bg-gradient-to-r from-amber-400 to-yellow-500 flex items-center justify-center text-white mr-3">
+                                金
+                            </span>
+                            贵金属/黄金
+                        </h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">避险先锋</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">湖南黄金</span>
+                            <span class="text-red-600 font-bold">涨停</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">赤峰黄金等</span>
+                            <span class="text-red-600 font-bold">强势封板</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-600"><strong>市场脉络：</strong>全球流动性预期博弈叠加地缘冲突升级，市场恐慌情绪蔓延，黄金等贵金属作为终极避险资产获得机构大额净买入。</p>
+                    </div>
+                </div>
+
+                <!-- Military & Aerospace -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-indigo-800 flex items-center justify-center text-white mr-3">
+                                军
+                            </span>
+                            军工与航天电子
+                        </h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">逆市上攻</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">雷科防务</span>
+                            <span class="text-red-600 font-bold">涨停</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">多只航天电子股</span>
+                            <span class="text-red-600 font-bold">涨停/大涨</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-600"><strong>市场脉络：</strong>同样受突发的地缘危机催化，国防军工、航天航空装备板块展现出强劲的防御和进攻属性，吸引大量热钱。</p>
+                    </div>
+                </div>
+
+                <!-- Declining Sectors -->
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg lg:col-span-2 xl:col-span-3">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <span class="w-10 h-10 rounded-full bg-gradient-to-r from-gray-500 to-slate-500 flex items-center justify-center text-white mr-3">
+                                跌
+                            </span>
+                            深度调整板块
+                        </h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">获利盘出逃</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <p class="text-gray-700 font-bold mb-2">科创与高估值成长股</p>
+                            <p class="text-sm text-gray-600">科创50重挫超5%，前期热门的AI概念、半导体、新能源赛道遭遇无差别抛售。风险偏好骤降使得资金撤离高估值资产。</p>
+                        </div>
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <p class="text-gray-700 font-bold mb-2">泛消费与中小盘题材</p>
+                            <p class="text-sm text-gray-600">大面积个股回落（逾4300股下跌），流动性向头部央国企、资源类红利股集中（抽血效应），导致中小市值股流动性紧缺而大跌。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market Summary Chart -->
+        <section class="mb-10 animate-fade-in delay-4">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-green-500 to-teal-500 rounded mr-3"></span>
+                今日主要指数涨跌幅
+            </h2>
+            <div class="glass-effect rounded-2xl p-6 shadow-lg">
+                <canvas id="marketChart" height="100"></canvas>
+            </div>
+        </section>
+
+        <!-- Dialectical Analysis Summary -->
+        <section class="mb-10 animate-fade-in delay-5">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-indigo-500 to-purple-500 rounded mr-3"></span>
+                市场总结与辩证展望
+            </h2>
+            <div class="glass-effect rounded-2xl p-6 shadow-lg border-l-4 border-indigo-500">
+                <div class="space-y-4 text-gray-700 leading-relaxed">
+                    <p><strong>辩证视角下的今日盘面：</strong>今日A股呈现了显著的<strong>放量下挫与极端的结构性分化</strong>。</p>
+                    
+                    <div class="flex flex-col md:flex-row gap-6 mt-4">
+                        <div class="flex-1 bg-red-50 p-4 rounded-lg border border-red-100">
+                            <h4 class="font-bold text-red-700 mb-2 flex items-center">
+                                <span class="mr-2">🔍 风险与挑战（反方观察）</span>
+                            </h4>
+                            <p class="text-sm">三大指数全线重挫，超过4300只个股下跌，尤其是科创50跌幅超5%，反映出市场整体的避险情绪急剧升温。突发的地缘政治冲突（美以对伊朗军事行动）打压了全球资本风险偏好，压制了科技和成长股的估值。这对于持有中小盘题材和赛道股的普通投资者而言，短期账面回撤和信心打击是显著的。</p>
+                        </div>
+                        
+                        <div class="flex-1 bg-blue-50 p-4 rounded-lg border border-blue-100">
+                            <h4 class="font-bold text-blue-700 mb-2 flex items-center">
+                                <span class="mr-2">💡 机遇与底蕴（正方观察）</span>
+                            </h4>
+                            <p class="text-sm">两市成交额历史性突破3.05万亿的“天量”，这一数据极其重要。它意味着在恐慌盘大量涌出的同时，底部承接资金同样充沛，市场流动性处于极度活跃状态。“三桶油”涨停和黄金、军工的暴涨，说明资金并未彻底撤离市场，而是进行了激烈的<strong>高低切和风格切换</strong>。对于机构投资者或价值投资者，这种极端震荡反而砸出了错杀优质资产的中长期配置坑位。</p>
+                        </div>
+                    </div>
+
+                    <p class="mt-4 p-4 bg-gray-100 rounded-lg">
+                        <strong>操作策略建议：</strong>在当前复杂多变的国内外局势下，投资者应保持理性，避免盲目追涨杀跌。既要防范高位题材股的流动性踩踏风险，也应拨开恐慌情绪的迷雾，重点关注那些具备强劲现金流、高股息防御属性的红利资产，以及在地缘局势错综复杂中凸显出核心战略价值的硬科技与资源类标的。
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-10">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400">数据来源：财联社、证券时报、新浪财经、同花顺、东方财富</p>
+            <p class="text-gray-500 text-sm mt-2">本报告仅供参考，不构成投资建议（AI生成辅助分析）</p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const html = document.documentElement;
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            html.classList.add('dark');
+            themeIcon.textContent = '🌙';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            if (html.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+                themeIcon.textContent = '🌙';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeIcon.textContent = '☀️';
+            }
+            updateChartColors();
+        });
+
+        // Chart.js - Daily Performance
+        const ctx = document.getElementById('marketChart').getContext('2d');
+        let marketChart;
+
+        function getChartColors() {
+            const isDark = html.classList.contains('dark');
+            return {
+                textColor: isDark ? '#e2e8f0' : '#374151',
+                gridColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+            };
+        }
+
+        function initChart() {
+            const colors = getChartColors();
+            marketChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['上证指数', '深证成指', '创业板指', '科创50'],
+                    datasets: [{
+                        label: '今日涨跌幅 (%)',
+                        data: [-1.43, -3.07, -2.57, -5.38],
+                        backgroundColor: [
+                            '#4ecdc4', '#4ecdc4', '#4ecdc4', '#4ecdc4'
+                        ],
+                        borderRadius: 8,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + '%';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: { color: colors.gridColor },
+                            ticks: {
+                                color: colors.textColor,
+                                callback: function(value) { return value + '%'; }
+                            }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: colors.textColor }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChartColors() {
+            if (!marketChart) return;
+            const colors = getChartColors();
+            marketChart.options.scales.y.grid.color = colors.gridColor;
+            marketChart.options.scales.y.ticks.color = colors.textColor;
+            marketChart.options.scales.x.ticks.color = colors.textColor;
+            marketChart.update();
+        }
+
+        initChart();
+    </script>
+</body>
+</html>
