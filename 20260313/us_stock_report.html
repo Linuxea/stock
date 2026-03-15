@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026年3月13日 美股市场行情报告</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Noto Sans SC', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%); }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeInUp 0.6s ease-out forwards; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+        .delay-6 { animation-delay: 0.6s; }
+
+        html.dark body { background-color: #0f172a; color: #e2e8f0; }
+        html.dark .glass-effect {
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        html.dark h2, html.dark h3, html.dark h4 { color: #f1f5f9; }
+        html.dark .text-gray-800 { color: #f1f5f9; }
+        html.dark .text-gray-700 { color: #cbd5e1; }
+        html.dark .text-gray-600 { color: #94a3b8; }
+        html.dark .text-gray-500 { color: #64748b; }
+        html.dark .bg-gray-50 { background-color: rgba(51, 65, 85, 0.5); }
+        html.dark .bg-gray-100 { background-color: rgba(51, 65, 85, 0.8); }
+        html.dark .bg-red-50 { background-color: rgba(127, 29, 29, 0.3); }
+        html.dark .bg-blue-50 { background-color: rgba(30, 58, 138, 0.3); }
+        html.dark .bg-green-50 { background-color: rgba(20, 83, 45, 0.3); }
+        html.dark .bg-yellow-100 { background-color: rgba(161, 98, 7, 0.3); }
+        html.dark .text-yellow-700 { color: #fcd34d; }
+        html.dark .bg-green-100 { background-color: rgba(22, 101, 52, 0.3); }
+        html.dark .text-green-700 { color: #86efac; }
+        html.dark .bg-red-100 { background-color: rgba(153, 27, 27, 0.3); }
+        html.dark .text-red-700 { color: #fca5a5; }
+        html.dark footer { background-color: #020617; }
+        html.dark .border-gray-200 { border-color: rgba(71, 85, 105, 0.5); }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+        }
+        html.dark .theme-toggle {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <button class="theme-toggle" id="themeToggle" title="切换主题">
+        <span id="themeIcon">☀️</span>
+    </button>
+
+    <header class="gradient-bg text-white py-8 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold mb-2">美股市场行情报告</h1>
+                    <p class="text-white/80 text-lg">美东时间 2026年3月13日 收盘 | 伊朗战争冲击市场</p>
+                </div>
+                <div class="mt-4 md:mt-0 text-right">
+                    <p class="text-sm text-white/70">数据更新时间</p>
+                    <p class="text-xl font-semibold">2026-03-14 05:00 (北京时间)</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <section class="mb-10 animate-fade-in">
+            <div class="glass-effect rounded-2xl p-6 shadow-lg bg-gradient-to-r from-blue-100 to-red-100">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">📊 今日美股三大指数表现</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div>
+                        <p class="text-2xl font-bold text-red-600">-0.26%</p>
+                        <p class="text-gray-600">道琼斯工业指数</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-red-600">-0.61%</p>
+                        <p class="text-gray-600">标普500指数</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-red-600">-0.93%</p>
+                        <p class="text-gray-600">纳斯达克综合指数</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-10 animate-fade-in delay-1">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-blue-500 to-purple-500 rounded mr-3"></span>
+                美股三大指数
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">道琼斯工业指数</h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">DJI</span>
+                    </div>
+                    <p class="text-4xl font-bold text-red-500 mb-2">46,558.47</p>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-lg text-red-600 font-semibold">-119.38</span>
+                        <span class="text-lg text-red-600 font-semibold">-0.26%</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-3">本周累计下跌2%</p>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">标普500指数</h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-gray-200 text-gray-700">S&P 500</span>
+                    </div>
+                    <p class="text-4xl font-bold text-red-500 mb-2">6,632.19</p>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-lg text-red-600 font-semibold">-40.43</span>
+                        <span class="text-lg text-red-600 font-semibold">-0.61%</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-3">连续三周下跌，年内新低</p>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-gray-800">纳斯达克综合指数</h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700">NASDAQ</span>
+                    </div>
+                    <p class="text-4xl font-bold text-red-500 mb-2">22,105.36</p>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-lg text-red-600 font-semibold">-206.62</span>
+                        <span class="text-lg text-red-600 font-semibold">-0.93%</span>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-3">本周累计下跌1.3%</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-10 animate-fade-in delay-2">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-red-500 to-orange-500 rounded mr-3"></span>
+                市场情绪与关键指标
+            </h2>
+            <div class="glass-effect rounded-2xl p-6 shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div class="border-r border-gray-200 last:border-0">
+                        <p class="text-gray-500 mb-2">VIX恐慌指数</p>
+                        <p class="text-3xl font-bold text-red-600">27.29</p>
+                        <p class="text-sm text-red-600 mt-1">上涨12.6%，市场恐慌升温</p>
+                    </div>
+                    <div class="border-r border-gray-200 last:border-0">
+                        <p class="text-gray-500 mb-2">WTI原油</p>
+                        <p class="text-3xl font-bold text-green-600">$96+</p>
+                        <p class="text-sm text-green-600 mt-1">重回100美元关口附近</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-500 mb-2">市场成交</p>
+                        <p class="text-3xl font-bold text-gray-700">199.6亿股</p>
+                        <p class="text-sm text-gray-500 mt-1">低于20日均值</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-10 animate-fade-in delay-3">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-purple-500 to-pink-500 rounded mr-3"></span>
+                热门个股表现
+            </h2>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">科技巨头表现</h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">普遍下跌</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">苹果 (AAPL)</span>
+                            <span class="text-red-600 font-bold">-2.21%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">Meta (META)</span>
+                            <span class="text-red-600 font-bold">-3.83%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">英伟达 (NVDA)</span>
+                            <span class="text-red-600 font-bold">-1.58%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                            <span class="text-gray-700">博通 (AVGO)</span>
+                            <span class="text-red-600 font-bold">-4.11%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-effect rounded-2xl p-6 card-hover shadow-lg">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-bold text-gray-800">能源板块逆势走强</h3>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">油价催化</span>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                            <span class="text-gray-700">能源板块ETF (XLE)</span>
+                            <span class="text-green-600 font-bold">+2.5%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                            <span class="text-gray-700">埃克森美孚 (XOM)</span>
+                            <span class="text-green-600 font-bold">上涨</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                            <span class="text-gray-700">雪佛龙 (CVX)</span>
+                            <span class="text-green-600 font-bold">上涨</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                        <p class="text-sm text-gray-600"><strong>驱动因素：</strong>伊朗战争持续推高油价，原油价格重回100美元关口上方，能源股受益上涨。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-10 animate-fade-in delay-4">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-green-500 to-teal-500 rounded mr-3"></span>
+                今日主要指数涨跌幅
+            </h2>
+            <div class="glass-effect rounded-2xl p-6 shadow-lg">
+                <canvas id="marketChart" height="100"></canvas>
+            </div>
+        </section>
+
+        <section class="mb-10 animate-fade-in delay-5">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <span class="w-1 h-8 bg-gradient-to-b from-indigo-500 to-purple-500 rounded mr-3"></span>
+                市场总结与后市展望
+            </h2>
+            <div class="glass-effect rounded-2xl p-6 shadow-lg border-l-4 border-indigo-500">
+                <div class="space-y-4 text-gray-700 leading-relaxed">
+                    <p><strong>今日美股市场总结：</strong>美股三大指数集体收跌，标普500指数创下年内新低，连续第三周下跌。</p>
+                    
+                    <div class="flex flex-col md:flex-row gap-6 mt-4">
+                        <div class="flex-1 bg-red-50 p-4 rounded-lg border border-red-100">
+                            <h4 class="font-bold text-red-700 mb-2 flex items-center">
+                                <span class="mr-2">🔍 主要压力因素</span>
+                            </h4>
+                            <p class="text-sm">伊朗战争进入第二周，霍尔木兹海峡航运受阻持续，原油价格重回100美元上方，加剧全球通胀担忧。特朗普与伊朗最高领袖均表现强硬姿态，地缘政治风险溢价持续升温。美联储1月PCE数据走高，进一步削弱2026年降息预期。</p>
+                        </div>
+                        
+                        <div class="flex-1 bg-blue-50 p-4 rounded-lg border border-blue-100">
+                            <h4 class="font-bold text-blue-700 mb-2 flex items-center">
+                                <span class="mr-2">💡 结构性亮点</span>
+                            </h4>
+                            <p class="text-sm">能源板块逆势上涨2.5%，成为少数亮点。科技股普遍承压，苹果宣布下调中国App Store佣金率。VIX恐慌指数升至27.29，市场避险情绪显著升温。公用事业等防御性板块表现相对稳健。</p>
+                        </div>
+                    </div>
+
+                    <p class="mt-4 p-4 bg-gray-100 rounded-lg">
+                        <strong>后市展望：</strong>地缘政治风险仍是主导因素，投资者需密切关注伊朗局势发展及原油价格走势。若冲突持续升级，可能进一步推高通胀预期，对成长股估值形成压力。建议关注能源、公用事业等防御性板块，同时警惕科技股的估值回调风险。
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 mt-10">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400">数据来源：Yahoo Finance, Investing.com, 新浪财经, 财联社</p>
+            <p class="text-gray-500 text-sm mt-2">本报告仅供参考，不构成投资建议（AI生成辅助分析）</p>
+        </div>
+    </footer>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const html = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            html.classList.add('dark');
+            themeIcon.textContent = '🌙';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            if (html.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+                themeIcon.textContent = '🌙';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeIcon.textContent = '☀️';
+            }
+            updateChartColors();
+        });
+
+        const ctx = document.getElementById('marketChart').getContext('2d');
+        let marketChart;
+
+        function getChartColors() {
+            const isDark = html.classList.contains('dark');
+            return {
+                textColor: isDark ? '#e2e8f0' : '#374151',
+                gridColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+            };
+        }
+
+        function initChart() {
+            const colors = getChartColors();
+            marketChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['道琼斯', '标普500', '纳斯达克', '罗素2000'],
+                    datasets: [{
+                        label: '今日涨跌幅 (%)',
+                        data: [-0.26, -0.61, -0.93, -0.36],
+                        backgroundColor: [
+                            '#ef4444', '#ef4444', '#ef4444', '#ef4444'
+                        ],
+                        borderRadius: 8,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + '%';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: { color: colors.gridColor },
+                            ticks: {
+                                color: colors.textColor,
+                                callback: function(value) { return value + '%'; }
+                            }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: colors.textColor }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChartColors() {
+            if (!marketChart) return;
+            const colors = getChartColors();
+            marketChart.options.scales.y.grid.color = colors.gridColor;
+            marketChart.options.scales.y.ticks.color = colors.textColor;
+            marketChart.options.scales.x.ticks.color = colors.textColor;
+            marketChart.update();
+        }
+
+        initChart();
+    </script>
+</body>
+</html>
